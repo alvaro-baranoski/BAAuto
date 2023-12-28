@@ -11,7 +11,7 @@ class LoggerTextBox(customtkinter.CTkFrame):
 
         self.log_label = customtkinter.CTkLabel(self, text="Log",font=customtkinter.CTkFont(family="Inter", size=30, weight="bold"))
         self.log_label.grid(row=0, column=0, sticky="nw", padx=20, pady=(20,0))
-         # Button to toggle autoscroll
+        # Button to toggle autoscroll
         self.toggle_autoscroll_button = customtkinter.CTkButton(self, height=35, text="Autoscroll On", command=self.toggle_autoscroll, font=("Inter", 16))
         self.toggle_autoscroll_button.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
         self.autoscroll_enabled = True  # Initially, autoscroll is enabled
