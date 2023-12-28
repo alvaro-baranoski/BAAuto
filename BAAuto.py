@@ -211,7 +211,7 @@ class App(customtkinter.CTk):
         linker = Linker()
         config = Config(linker, "config.json")
         sidebar = Sidebar(self, linker, config, fg_color="#25224F")
-        sidebar.grid(row=0, column=0, sticky="nsw")
+        sidebar.grid(row=0, column=0, pady=20, sticky="nsew")
         logger = LoggerTextBox(self, linker, config, fg_color="#262250")
         logger.grid(row=0, column=2, pady=20, sticky="nsew")
         config.load_config()

@@ -1,3 +1,4 @@
+from tkinter import E, N, S, W
 import customtkinter
 from PIL import Image
 from gui.frames.login import LoginFrame
@@ -9,22 +10,27 @@ from gui.custom_widgets.ctk_tooltip import CTkToolTip
 class Sidebar(customtkinter.CTkFrame):
     def __init__(self, master, linker, config, **kwargs):
         self.master = master
+        super().__init__(master=self.master, **kwargs)
         self.linker = linker
         self.config = config
-        super().__init__(master=self.master, **kwargs)
         self.grid_rowconfigure((0, 1, 2), weight=1)
         self.grid_columnconfigure(0, weight=1)
-        karin_logo = customtkinter.CTkImage(light_image=Image.open("gui/icons/karin.png"), size=(152,152))
-        karin_logo_label = customtkinter.CTkLabel(self, image=karin_logo, text="")
-        karin_logo_label.grid(row=0, column=0, sticky="nsew")
+        
         self.gear_on = customtkinter.CTkImage(Image.open("gui/icons/gear_on.png"), size=(50,38))
         self.gear_off = customtkinter.CTkImage(Image.open("gui/icons/gear_off.png"), size=(50,38))
+        
+        self.create_profile_logo()
         self.create_module_frames()
         self.create_all_button_frame()
         self.create_then_frame()
         self.create_start_button()
-        self.create_notification_frames()
+        # self.create_notification_frames()
         self.linker.sidebar = self
+        
+    def create_profile_logo(self):
+        karin_logo = customtkinter.CTkImage(light_image=Image.open("gui/icons/karin.png"), size=(152,152))
+        karin_logo_label = customtkinter.CTkLabel(self, image=karin_logo, text="")
+        karin_logo_label.grid(row=0, column=0, sticky="nsew")
         
     def create_module_frames(self):
 
@@ -46,20 +52,44 @@ class Sidebar(customtkinter.CTkFrame):
 
     def create_module_checkbox(self, module, i):
         self.linker.modules_dictionary[module]['checkbox'] = customtkinter.CTkCheckBox(
-            self.checkbox_frame, text=self.linker.capitalise(module), text_color="#FFFFFF", font=("Inter", 16), command=lambda x=[module, "enabled"]: self.config.save_to_json(x))
-        self.linker.modules_dictionary[module]['checkbox'].grid(row=i, column=0, columnspan=2,padx=20, pady=(10, 5), sticky="nw")
+            self.checkbox_frame, 
+            text=self.linker.capitalise(module), 
+            text_color="#FFFFFF", 
+            font=("Inter", 16),
+            command=lambda x=[module, "enabled"]: self.config.save_to_json(x))
+        self.linker.modules_dictionary[module]['checkbox'].grid(row=i, column=0, columnspan=2, padx=20, pady=(10, 5), sticky="nw")
         self.linker.widgets[module]['enabled'] = self.linker.modules_dictionary[module]['checkbox']
 
     def create_module_button(self, module, i):
         self.linker.modules_dictionary[module]['button'] = customtkinter.CTkButton(
-            self.checkbox_frame, width=50, image=self.gear_off, text="", fg_color="transparent", command=lambda x=module: self.display_settings(module))
-        self.linker.modules_dictionary[module]['button'].grid(row=i, column=1, padx=(40,0), pady=(2,0), sticky="nw")        
+            self.checkbox_frame, 
+            width=50, 
+            image=self.gear_off, 
+            text="", 
+            fg_color="transparent", 
+            command=lambda x=module: self.display_settings(module))
+        self.linker.modules_dictionary[module]['button'].grid(row=i, column=1, padx=(40,20), pady=(2,2), sticky="nw")        
 
     def create_all_button_frame(self):
-        self.select_all_button = customtkinter.CTkButton(self.checkbox_frame, width=100, text="Select All", fg_color="#DC621D", font=("Inter",20), command=self.select_all)
-        self.select_all_button.grid(row=4, column=0, padx=10, pady=(15,20), sticky="w")
-        self.clear_all_button = customtkinter.CTkButton(self.checkbox_frame, width=100, text="Clear All", fg_color="#DC621D", font=("Inter",20), command=self.clear_all)
-        self.clear_all_button.grid(row=4, column=1, padx=10, pady=(15,20), sticky="w")
+        self.select_all_button = customtkinter.CTkButton(
+            self.checkbox_frame, 
+            width=100, 
+            text="Select All", 
+            fg_color="#DC621D", 
+            font=("Inter",20), 
+            command=self.select_all)
+        
+        self.select_all_button.grid(row=4, column=0, padx=10, pady=(15, 20), sticky=(N, S, E, W))
+        
+        self.clear_all_button = customtkinter.CTkButton(
+            self.checkbox_frame, 
+            width=100, 
+            text="Clear All", 
+            fg_color="#DC621D", 
+            font=("Inter",20), 
+            command=self.clear_all)
+        
+        self.clear_all_button.grid(row=4, column=1, padx=10, pady=(15, 20), sticky=(N, S, E, W))
 
     def create_then_frame(self):
         self.then_frame = customtkinter.CTkFrame(self, fg_color="transparent")
@@ -67,14 +97,14 @@ class Sidebar(customtkinter.CTkFrame):
 
         self.then_label = customtkinter.CTkLabel(self.then_frame, text="Then", font=customtkinter.CTkFont(size=16, family="Inter", underline=True))
         self.then_label.grid(row=0, column=0, padx=(0, 10), sticky="nw")
-        self.then_tooltip = CTkToolTip(self.then_label, 
-                                       message="Administrator privileges most likely required for exiting emulator and shutting down. For exiting emulator, path MUST be provided in Login Settings and be valid.", 
-                                       wraplength=400)
+        self.then_tooltip = CTkToolTip(
+            self.then_label,
+            message="Administrator privileges most likely required for exiting emulator and shutting down. For exiting emulator, path MUST be provided in Login Settings and be valid.", 
+            wraplength=400)
         
         then_values = ["Do Nothing", "Exit BAAuto", "Exit Emulator", "Exit BAAuto and Emulator", "Shutdown"]
         self.then_optionmenu = customtkinter.CTkOptionMenu(self.then_frame, values=then_values, command=lambda choice: self.save_then(choice))
         self.then_optionmenu.grid(row=0, column=1, sticky="nw")
-
         
         self.linker.widgets["then"] = self.then_optionmenu
 
