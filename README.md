@@ -1,3 +1,10 @@
+Todo:
+- Correct any bugs I find when running the program (explore it, run multiple test cases)
+- Refactor it to understand better how it works
+- Add unit tests (maybe on GH Actions also)
+- Generate installer
+- After that think about new functionalities
+
 # BAAuto: Blue Archive Automation Script
 ![example](https://github.com/RedDeadDepresso/BAAuto/assets/94017243/8c661360-5667-401a-986d-3fb0f7400462)
 
